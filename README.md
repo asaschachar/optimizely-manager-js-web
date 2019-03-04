@@ -8,7 +8,7 @@ npm install --save git+https://git@github.com/asaschachar/optimizely-manager-js-
 ## Setup 
 At your application startup:
 ```
-const OptimizelyManager = require('optimizely-manager-js-web');
+import OptimizelyManager from 'optimizely-manager-js-web';
 const optimizely = new OptimizelyManager({
   sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz'
 })
