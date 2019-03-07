@@ -138,19 +138,8 @@
   /**
    * Optimizely Datafile Manager Web
    *
-   * USAGE - INSTALLATION
-   *   const OptimizelyManager import 'optimizely-manager-js-web';
-   *   const optimizely = new OptimizelyManager({
-   *     sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz'
-   *   })
-   *
-   * USAGE - USING A FEATURE FLAG
-   *   const enabled = optimizely.isFeatureEnabled('sale_price');
-   *
-   *   OR
-   *
-   *   const optimizely = OptimizelyManager.instance.getClient();
-   *   const enabled = optimizely.isFeatureEnabled('sale_price');
+   * Creates a singleton instance of a manager which then can be used
+   * to interact with the Optimizely SDK anywhere in your application.
    */
   var optimizely = require('@optimizely/optimizely-sdk');
 
@@ -163,26 +152,21 @@
   function () {
     function OptimizelyManager(_ref) {
       var sdkKey = _ref.sdkKey,
-          debug = _ref.debug,
-          rest = _objectWithoutProperties(_ref, ["sdkKey", "debug"]);
+          logLevel = _ref.logLevel,
+          rest = _objectWithoutProperties(_ref, ["sdkKey", "logLevel"]);
 
       _classCallCheck(this, OptimizelyManager);
 
+      logLevel = logLevel || LOG_LEVEL.DEBUG;
       var currentDatafile = {};
-      var logLevel = debug ? LOG_LEVEL.DEBUG : LOG_LEVEL.WARNING;
       var logger = defaultLogger.createLogger({
         logLevel: logLevel
       });
       logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Loading Optimizely Manager');
       this.optimizelyClientInstance = {
         isFeatureEnabled: function isFeatureEnabled() {
-          var UNIINITIALIZED_ERROR = "MANAGER: isFeatureEnabled called but Optimizely not yet initialized.\n\n          If you just started your web app, wait a minute and try the request again.\n\n          OR try moving your OptimizelyManager initialization higher in your application startup code\n          OR move your isFeatureEnabled call later in your application lifecycle.\n          OR ignore this error and turn it into a warning by setting debug=false\n\n          If this error persists, contact Optimizely!\n\n          TODO: Enable a blocking for Optimizely through the manager\n        ";
-
-          if (debug) {
-            logger.log(LOG_LEVEL.ERROR, UNIINITIALIZED_ERROR);
-          } else {
-            logger.log(LOG_LEVEL.DEBUG, UNIINITIALIZED_ERROR);
-          }
+          var UNIINITIALIZED_ERROR = "MANAGER: isFeatureEnabled called but Optimizely not yet initialized.\n\n          If you just started your web app, wait a minute and try the request again.\n\n          OR try moving your OptimizelyManager initialization higher in your application startup code\n          OR move your isFeatureEnabled call later in your application lifecycle.\n          OR ignore this error and turn it into a warning by changinge the logLevel\n\n          If this error persists, contact Optimizely!\n        ";
+          logger.log(LOG_LEVEL.ERROR, UNIINITIALIZED_ERROR);
         }
       };
       var datafileString = localStorage.getItem('optimizelyDatafile');

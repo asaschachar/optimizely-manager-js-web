@@ -1,28 +1,17 @@
 /**
  * Optimizely Datafile Manager Web
  *
- * USAGE - INSTALLATION
- *   const OptimizelyManager import 'optimizely-manager-js-web';
- *   const optimizely = new OptimizelyManager({
- *     sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz'
- *   })
- *
- * USAGE - USING A FEATURE FLAG
- *   const enabled = optimizely.isFeatureEnabled('sale_price');
- *
- *   OR
- *
- *   const optimizely = OptimizelyManager.instance.getClient();
- *   const enabled = optimizely.isFeatureEnabled('sale_price');
+ * Creates a singleton instance of a manager which then can be used
+ * to interact with the Optimizely SDK anywhere in your application.
  */
 const optimizely = require('@optimizely/optimizely-sdk');
 const defaultLogger = require('@optimizely/optimizely-sdk/lib/plugins/logger');
 const LOG_LEVEL = require('@optimizely/optimizely-sdk/lib/utils/enums').LOG_LEVEL;
 
 class OptimizelyManager{
-  constructor({ sdkKey, debug, ...rest }) {
+  constructor({ sdkKey, logLevel, ...rest }) {
+    logLevel = logLevel || LOG_LEVEL.DEBUG;
     let currentDatafile = {};
-    let logLevel = debug ? LOG_LEVEL.DEBUG : LOG_LEVEL.WARNING;
     let logger = defaultLogger.createLogger({ logLevel })
 
     logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Loading Optimizely Manager');
@@ -34,17 +23,12 @@ class OptimizelyManager{
 
           OR try moving your OptimizelyManager initialization higher in your application startup code
           OR move your isFeatureEnabled call later in your application lifecycle.
-          OR ignore this error and turn it into a warning by setting debug=false
+          OR ignore this error and turn it into a warning by changinge the logLevel
 
           If this error persists, contact Optimizely!
-
-          TODO: Enable a blocking for Optimizely through the manager
         `;
-        if (debug) {
-          logger.log(LOG_LEVEL.ERROR, UNIINITIALIZED_ERROR)
-        } else {
-          logger.log(LOG_LEVEL.DEBUG, UNIINITIALIZED_ERROR)
-        }
+
+        logger.log(LOG_LEVEL.ERROR, UNIINITIALIZED_ERROR)
       }
     }
 
