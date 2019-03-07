@@ -158,110 +158,111 @@
 
   var LOG_LEVEL = require('@optimizely/optimizely-sdk/lib/utils/enums').LOG_LEVEL;
 
-  function OptimizelyManager(_ref) {
-    var sdkKey = _ref.sdkKey,
-        debug = _ref.debug,
-        rest = _objectWithoutProperties(_ref, ["sdkKey", "debug"]);
+  var OptimizelyManager =
+  /*#__PURE__*/
+  function () {
+    function OptimizelyManager(_ref) {
+      var sdkKey = _ref.sdkKey,
+          debug = _ref.debug,
+          rest = _objectWithoutProperties(_ref, ["sdkKey", "debug"]);
 
-    var currentDatafile = {};
-    var logLevel = debug ? LOG_LEVEL.DEBUG : LOG_LEVEL.WARNING;
-    var logger = defaultLogger.createLogger({
-      logLevel: logLevel
-    });
-    logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Loading Optimizely Manager');
-    var optimizelyClientInstance = {
-      isFeatureEnabled: function isFeatureEnabled() {
-        var UNIINITIALIZED_ERROR = "MANAGER: isFeatureEnabled called but Optimizely not yet initialized.\n\n        If you just started your web app, wait a minute and try the request again.\n\n        OR try moving your OptimizelyManager initialization higher in your application startup code\n        OR move your isFeatureEnabled call later in your application lifecycle.\n        OR ignore this error and turn it into a warning by setting debug=false\n\n        If this error persists, contact Optimizely!\n\n        TODO: Enable a blocking for Optimizely through the manager\n      ";
+      _classCallCheck(this, OptimizelyManager);
 
-        if (debug) {
-          logger.log(LOG_LEVEL.ERROR, UNIINITIALIZED_ERROR);
-        } else {
-          logger.log(LOG_LEVEL.DEBUG, UNIINITIALIZED_ERROR);
+      var currentDatafile = {};
+      var logLevel = debug ? LOG_LEVEL.DEBUG : LOG_LEVEL.WARNING;
+      var logger = defaultLogger.createLogger({
+        logLevel: logLevel
+      });
+      logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Loading Optimizely Manager');
+      this.optimizelyClientInstance = {
+        isFeatureEnabled: function isFeatureEnabled() {
+          var UNIINITIALIZED_ERROR = "MANAGER: isFeatureEnabled called but Optimizely not yet initialized.\n\n          If you just started your web app, wait a minute and try the request again.\n\n          OR try moving your OptimizelyManager initialization higher in your application startup code\n          OR move your isFeatureEnabled call later in your application lifecycle.\n          OR ignore this error and turn it into a warning by setting debug=false\n\n          If this error persists, contact Optimizely!\n\n          TODO: Enable a blocking for Optimizely through the manager\n        ";
+
+          if (debug) {
+            logger.log(LOG_LEVEL.ERROR, UNIINITIALIZED_ERROR);
+          } else {
+            logger.log(LOG_LEVEL.DEBUG, UNIINITIALIZED_ERROR);
+          }
         }
-      }
-    };
-    var datafileString = localStorage.getItem('optimizelyDatafile');
+      };
+      var datafileString = localStorage.getItem('optimizelyDatafile');
 
-    if (datafileString) {
-      try {
-        currentDatafile = JSON.parse(datafileString);
-        optimizelyClientInstance = optimizely.createInstance(_objectSpread({
-          datafile: currentDatafile,
-          logger: logger
-        }, rest));
-      } catch (err) {
-        logger.log(LOG_LEVEL.DEBUG, 'Could not parse datafile stored in localstorage under \'optimizelyDatafile\'');
-      }
-    }
-
-    function pollForDatafile() {
-      // Request the datafile every second. If the datafile has changed
-      // since the last time we've seen it, then re-instantiate the client
-      var DATAFILE_URL = "https://cdn.optimizely.com/datafiles/".concat(sdkKey, ".json");
-      fetch(DATAFILE_URL).then(function (response) {
-        return response.json();
-      }).then(function (latestDatafile) {
-        var latestDatafileString = JSON.stringify(latestDatafile);
-
-        if (latestDatafileString !== JSON.stringify(currentDatafile)) {
-          logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Received an updated datafile and is re-initializing'); // The datafile is different! Let's re-instantiate the client
-
-          optimizelyClientInstance = optimizely.createInstance(_objectSpread({
-            datafile: latestDatafile,
+      if (datafileString) {
+        try {
+          currentDatafile = JSON.parse(datafileString);
+          this.optimizelyClientInstance = optimizely.createInstance(_objectSpread({
+            datafile: currentDatafile,
             logger: logger
           }, rest));
-          currentDatafile = latestDatafile;
-          localStorage.setItem('optimizelyDatafile', latestDatafileString);
+        } catch (err) {
+          logger.log(LOG_LEVEL.DEBUG, 'Could not parse datafile stored in localstorage under \'optimizelyDatafile\'');
         }
-      });
+      }
+
+      function pollForDatafile() {
+        // Request the datafile every second. If the datafile has changed
+        // since the last time we've seen it, then re-instantiate the client
+        var DATAFILE_URL = "https://cdn.optimizely.com/datafiles/".concat(sdkKey, ".json");
+        fetch(DATAFILE_URL).then(function (response) {
+          return response.json();
+        }).then(function (latestDatafile) {
+          var latestDatafileString = JSON.stringify(latestDatafile);
+
+          if (latestDatafileString !== JSON.stringify(currentDatafile)) {
+            logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Received an updated datafile and is re-initializing'); // The datafile is different! Let's re-instantiate the client
+
+            optimizelyClientInstance = optimizely.createInstance(_objectSpread({
+              datafile: latestDatafile,
+              logger: logger
+            }, rest));
+            currentDatafile = latestDatafile;
+            localStorage.setItem('optimizelyDatafile', latestDatafileString);
+          }
+        });
+      }
+
+      setInterval(pollForDatafile, 1000);
     }
 
-    setInterval(pollForDatafile, 1000);
-    return {
-      isFeatureEnabled: function isFeatureEnabled() {
-        var _optimizelyClientInst;
-
-        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-          args[_key] = arguments[_key];
-        }
-
-        // Check to see if we need to generate a userId
-        if (args[1] === undefined) args[1] = Math.random().toString();
-        return (_optimizelyClientInst = optimizelyClientInstance).isFeatureEnabled.apply(_optimizelyClientInst, args);
-      },
-      getClient: function getClient() {
-        return this;
+    _createClass(OptimizelyManager, [{
+      key: "isFeatureEnabled",
+      value: function isFeatureEnabled(featureKey, userId) {
+        userId = userId || Math.random().toString();
+        return this.optimizelyClientInstance.isFeatureEnabled(featureKey, userId);
       }
-    };
-  }
+    }]);
+
+    return OptimizelyManager;
+  }();
 
   var Singleton =
   /*#__PURE__*/
   function () {
     function Singleton() {
       _classCallCheck(this, Singleton);
-
-      if (!Singleton.instance) {
-        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-          args[_key2] = arguments[_key2];
-        }
-
-        Singleton.instance = _construct(OptimizelyManager, args);
-      }
     }
 
     _createClass(Singleton, [{
-      key: "isFeatureEnabled",
-      value: function isFeatureEnabled() {
-        var _Singleton$instance;
+      key: "configure",
+      value: function configure() {
+        for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
 
-        return (_Singleton$instance = Singleton.instance).isFeatureEnabled.apply(_Singleton$instance, arguments);
+        this.instance = _construct(OptimizelyManager, args);
+      }
+    }, {
+      key: "getClient",
+      value: function getClient() {
+        return this.instance;
       }
     }]);
 
     return Singleton;
   }();
 
-  return Singleton;
+  var main = new Singleton();
+
+  return main;
 
 }));

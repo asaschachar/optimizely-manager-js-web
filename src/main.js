@@ -91,7 +91,7 @@ class OptimizelyManager{
   isFeatureEnabled(featureKey, userId) {
     userId = userId || Math.random().toString()
     return this.optimizelyClientInstance.isFeatureEnabled(featureKey, userId);
-  },
+  }
 }
 
 
