@@ -53,8 +53,8 @@ class OptimizelyManager{
       const DATAFILE_URL = `https://cdn.optimizely.com/datafiles/${sdkKey}.json`;
 
       fetch(DATAFILE_URL)
-        .then(function(response) { return response.json(); })
-        .then(function(latestDatafile) {
+        .then((response) => { return response.json(); })
+        .then((latestDatafile) => {
           const latestDatafileString = JSON.stringify(latestDatafile)
           if (latestDatafileString !== JSON.stringify(currentDatafile)) {
             logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Received an updated datafile and is re-initializing')
@@ -70,7 +70,7 @@ class OptimizelyManager{
         })
     }
 
-    setInterval(pollForDatafile, 1000);
+    setInterval(pollForDatafile.bind(this), 1000);
   }
 
   isFeatureEnabled(featureKey, userId) {

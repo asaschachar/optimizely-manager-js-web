@@ -184,6 +184,8 @@
       }
 
       function pollForDatafile() {
+        var _this = this;
+
         // Request the datafile every second. If the datafile has changed
         // since the last time we've seen it, then re-instantiate the client
         var DATAFILE_URL = "https://cdn.optimizely.com/datafiles/".concat(sdkKey, ".json");
@@ -195,7 +197,7 @@
           if (latestDatafileString !== JSON.stringify(currentDatafile)) {
             logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Received an updated datafile and is re-initializing'); // The datafile is different! Let's re-instantiate the client
 
-            this.optimizelyClientInstance = optimizely.createInstance(_objectSpread({
+            _this.optimizelyClientInstance = optimizely.createInstance(_objectSpread({
               datafile: latestDatafile,
               logger: logger
             }, rest));
@@ -205,7 +207,7 @@
         });
       }
 
-      setInterval(pollForDatafile, 1000);
+      setInterval(pollForDatafile.bind(this), 1000);
     }
 
     _createClass(OptimizelyManager, [{
