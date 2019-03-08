@@ -10,8 +10,9 @@ const LOG_LEVEL = require('@optimizely/optimizely-sdk/lib/utils/enums').LOG_LEVE
 
 class OptimizelyManager{
   constructor({ sdkKey, logLevel, ...rest }) {
-    logLevel = logLevel || LOG_LEVEL.DEBUG;
     let currentDatafile = {};
+
+    logLevel = logLevel || LOG_LEVEL.DEBUG;
     let logger = defaultLogger.createLogger({ logLevel })
 
     logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Loading Optimizely Manager');
@@ -58,7 +59,7 @@ class OptimizelyManager{
           if (latestDatafileString !== JSON.stringify(currentDatafile)) {
             logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Received an updated datafile and is re-initializing')
             // The datafile is different! Let's re-instantiate the client
-            optimizelyClientInstance = optimizely.createInstance({
+            this.optimizelyClientInstance = optimizely.createInstance({
               datafile: latestDatafile,
               logger,
               ...rest

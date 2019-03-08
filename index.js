@@ -157,8 +157,8 @@
 
       _classCallCheck(this, OptimizelyManager);
 
-      logLevel = logLevel || LOG_LEVEL.DEBUG;
       var currentDatafile = {};
+      logLevel = logLevel || LOG_LEVEL.DEBUG;
       var logger = defaultLogger.createLogger({
         logLevel: logLevel
       });
@@ -195,7 +195,7 @@
           if (latestDatafileString !== JSON.stringify(currentDatafile)) {
             logger.log(LOG_LEVEL.DEBUG, 'MANAGER: Received an updated datafile and is re-initializing'); // The datafile is different! Let's re-instantiate the client
 
-            optimizelyClientInstance = optimizely.createInstance(_objectSpread({
+            this.optimizelyClientInstance = optimizely.createInstance(_objectSpread({
               datafile: latestDatafile,
               logger: logger
             }, rest));
