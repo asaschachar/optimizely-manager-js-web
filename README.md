@@ -21,23 +21,31 @@ OptimizelyManager.configure([
 ])
 ```
 
-## SDK Registry Setup v2
+## SDK Registry Setup
 At your application startup:
 ```javascript
 import OptimizelyManager from 'optimizely-manager-js-web';
 import OptimizelySDK from '@optimizely/optimizely-sdk';
-OptimizelyManager.configure([
-  {
-    sdk: OptimizelySDK,
-    sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
-    name: 'backend-api',
-  },
-  {
-    sdk: OptimizelySDK,
-    sdkKey: 'XFjmGNFQK1snQExC1vgynY',
-    name: 'backend-permissions',
-  }
-])
+
+OptimizelyManager.withSdk(OptimizelySDK)
+
+OptimizelyManager.configure({
+  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
+});
+
+// Option 2: Multiple instances
+OptimizelyManager.register({
+  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
+  name: 'backend-models',
+});
+
+OptimizelyManager.register({
+  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
+  name: 'backend-api',
+});
+
+
+const optimizely = OptimizelyManager.getClient();
 ```
 
 ## Usage
