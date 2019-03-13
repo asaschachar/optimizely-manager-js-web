@@ -24,7 +24,7 @@ OptimizelyManager.configure([
 ## Usage
 When you want to use a feature flag:
 ```javascript
-const optimizely = OptimizelyManager.getClient();
+const optimizely = OptimizelyManager.getClient('backend-api');
 const enabled = optimizely.isFeatureEnabled('sale_price');
 ```                                                                     
                                                                         
@@ -33,6 +33,6 @@ If you are using a feature flag in another file, get the optimizely client first
 ```javascript
 const OptimizelyManager = require('optimizely-manager-node');
 
-const optimizely = OptimizelyManager.getClient();
+const optimizely = OptimizelyManager.getClient('backend-permissions');
 const enabled = optimizely.isFeatureEnabled('sale_price');
 ```
