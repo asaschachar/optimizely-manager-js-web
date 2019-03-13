@@ -29,23 +29,17 @@ import OptimizelySDK from '@optimizely/optimizely-sdk';
 
 OptimizelyManager.withSdk(OptimizelySDK)
 
-OptimizelyManager.configure({
-  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
-});
-
-// Option 2: Multiple instances
-OptimizelyManager.register({
-  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
-  name: 'backend-models',
-});
-
 OptimizelyManager.register({
   sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
   name: 'backend-api',
 });
 
+OptimizelyManager.register({
+  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
+  name: 'backend-permissions',
+});
 
-const optimizely = OptimizelyManager.getClient();
+const optimizely = OptimizelyManager.getRegisteredClient('backend-api');
 ```
 
 ## Usage
