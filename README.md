@@ -5,7 +5,7 @@
 npm install --save git+https://git@github.com/asaschachar/optimizely-manager-js-web.git#v2.0.0
 ```
  
-## Setup 
+## SDK Registry Setup 
 At your application startup:
 ```javascript
 import OptimizelyManager from 'optimizely-manager-js-web';
@@ -15,6 +15,25 @@ OptimizelyManager.configure([
     name: 'backend-api',
   },
   {
+    sdkKey: 'XFjmGNFQK1snQExC1vgynY',
+    name: 'backend-permissions',
+  }
+])
+```
+
+## SDK Registry Setup v2
+At your application startup:
+```javascript
+import OptimizelyManager from 'optimizely-manager-js-web';
+import OptimizelySDK from '@optimizely/optimizely-sdk';
+OptimizelyManager.configure([
+  {
+    sdk: OptimizelySDK,
+    sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
+    name: 'backend-api',
+  },
+  {
+    sdk: OptimizelySDK,
     sdkKey: 'XFjmGNFQK1snQExC1vgynY',
     name: 'backend-permissions',
   }
