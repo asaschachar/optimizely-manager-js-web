@@ -36,3 +36,16 @@ const OptimizelyManager = require('optimizely-manager-node');
 const optimizely = OptimizelyManager.getClient('backend-permissions');
 const enabled = optimizely.isFeatureEnabled('sale_price');
 ```
+
+## Injected SDK
+```javascript
+import OptimizelyManager from 'optimizely-manager-js-web';
+import OptimizelySDK from '@optimizely/optimizely-sdk';
+
+OptimizelyManager.configure({
+  sdk: OptimizelySDK,
+  sdkKey: 'Ly8FQj6vSaDcZUjySoWnWz',
+})
+
+OptimizelyManager.getClient();
+```
