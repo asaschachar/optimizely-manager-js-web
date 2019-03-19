@@ -1,3 +1,7 @@
+# Deprecation Notice
+This repo is going to be deprecated in favor of https://git@github.com/asaschachar/optimizely-manager-js, which does both JavaScript for node as well as browser environments.
+
+
 # Optimizely Datafile Manager JavaScript Web
                                                                         
 ## Installation
